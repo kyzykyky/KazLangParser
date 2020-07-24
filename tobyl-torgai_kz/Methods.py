@@ -10,7 +10,7 @@ def format_sentence(sentence):
     lines = ''
     for s in sentence:
         if len(s) > 32:
-            lines += s + "\n"
+            lines += s + ".\n"
     return lines.strip()
 
 
@@ -54,10 +54,10 @@ def Cat_action(Cat, Link):
             Article_action(Cat, article, links[article])
 
 
-
 def Article_action(Cat, article, link):
     print('Parsing ' + link + ' ...')
-    adr = open(os.path.join(Cat, article) + '.url', 'w', encoding='utf-8')
+    adr = open(os.path.join(Cat, article.replace('\"', "").replace("\'", "").replace("«", "").replace("»", ""))
+               + '.url', 'w', encoding='utf-8')
     adr.write(link)
     adr.close()
     try:
@@ -68,7 +68,8 @@ def Article_action(Cat, article, link):
         Text = Block.findAll('p')
         for line in Text:
             line = BeautifulSoup.get_text(line)
-            f = open(os.path.join(Cat, article) + ".txt", 'a+', encoding='utf-8')
+            f = open(os.path.join(Cat, article.replace('\"', "").replace("\'", "").replace("«", "").replace("»", ""))
+                     + ".txt", 'a+', encoding='utf-8')
             line = format_sentence(line)
             f.write(line)
             f.close()

@@ -8,7 +8,7 @@ def format_sentence(sentence):
     sentence = sentence.split(". ")
     lines = ''
     for s in sentence:
-        lines += s + "\n"
+        lines += s + ".\n"
     return lines.strip()
 
 
@@ -22,9 +22,9 @@ def article_action(article, cat, article_name):
     article_name = format_title(article_name)
     print('Parsing ' + address + ' ...')
     try:
-        adr = open(os.path.join(cat, article_name) + '.url', 'w', encoding='utf-8')
-        adr.write('[InternetShortcut]\n')
-        adr.write('URL=%s' % address)
+        adr = open(os.path.join(cat, article_name.replace('\"', "").replace("\'", "").replace("«", "").replace("»", ""))
+                   + '.url', 'w', encoding='utf-8')
+        adr.write(address)
         adr.close()
 
         req2 = urllib.request.urlopen(address)
@@ -33,7 +33,8 @@ def article_action(article, cat, article_name):
         text = soap2.find('div', class_='article-content').get_text(strip=True)
         text = format_sentence(text)
         print(article_name)
-        f = open(os.path.join(cat, article_name) + '.txt', 'w', encoding='utf-8')
+        f = open(os.path.join(cat, article_name.replace('\"', "").replace("\'", "").replace("«", "").replace("»", ""))
+                 + '.txt', 'w', encoding='utf-8')
         f.write(text)
         f.close()
     except:

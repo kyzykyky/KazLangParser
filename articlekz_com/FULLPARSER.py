@@ -1,9 +1,9 @@
 from HandyStuff import *
 
 
-parse_article_kz_com('https://articlekz.com/kk/article/category/187/', 'Заң')
-parse_article_kz_com('https://articlekz.com/kk/article/category/185/', 'Тарих')
-parse_article_kz_com('https://articlekz.com/kk/article/category/195/', 'Халықаралық қатынастар')
+# parse_article_kz_com('https://articlekz.com/kk/article/category/187/', 'Заң')
+# parse_article_kz_com('https://articlekz.com/kk/article/category/185/', 'Тарих')
+# parse_article_kz_com('https://articlekz.com/kk/article/category/195/', 'Халықаралық қатынастар')
 parse_article_kz_com('https://articlekz.com/kk/article/category/200/', 'Медицина')
 parse_article_kz_com('https://articlekz.com/kk/article/category/191/', 'Педагогика')
 parse_article_kz_com('https://articlekz.com/kk/article/category/198/', 'Техникалық ғылымдар')

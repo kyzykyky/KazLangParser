@@ -8,7 +8,7 @@ html = req.read()
 soap = BeautifulSoup(html, 'html.parser')
 
 materials = soap.find('table', class_='contentpane')
-print(materials)
+# print(materials)
 categories = BeautifulSoup.find_all(materials, 'li')
 links = {}  # Словарь
 print('This page has: '+str(len(categories)) + ' categories.')
@@ -52,7 +52,7 @@ for cat in links:
             req1 = urllib.request.urlopen(links[cat] + '?start=' + str(article_counter))
             html1 = req1.read()
             soap1 = BeautifulSoup(html1, 'html.parser')
-            #table = BeautifulSoup.find(soap1, 'table', class_='contentpane')
+            # table = BeautifulSoup.find(soap1, 'table', class_='contentpane')
             for article in BeautifulSoup.find_all(soap1, 'tr', class_='sectiontableentry1'):  # нечетные строки
                 article_action(article, cat, article.text)
             for article in BeautifulSoup.find_all(soap1, 'tr', class_='sectiontableentry2'):  # четные строки

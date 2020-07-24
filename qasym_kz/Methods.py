@@ -1,7 +1,7 @@
 import os
-import re
 from bs4 import BeautifulSoup
 import urllib.request
+import urllib.error
 
 
 def format_sentence(sentence):
@@ -9,7 +9,7 @@ def format_sentence(sentence):
     lines = ''
     for s in sentence:
         if len(s) > 25:
-            lines += s + "\n"
+            lines += s + ".\n"
     return lines.strip()
 
 
@@ -50,25 +50,26 @@ def Cat_action(Cat, Link):
             Article_action(Cat, article, links[article])
 
 
-
 def Article_action(Cat, name, link):
-    print('Parsing ' + link + ' ...')
-    fixed_name = name.replace('\"', "").replace("\'", "").replace("«", "").replace("»", "")
-    adr = open(os.path.join(Cat, fixed_name) + '.url', 'w', encoding='utf-8')
-    adr.write(link)
-    adr.close()
+    try:
+        print('Parsing ' + link + ' ...')
+        fixed_name = name.replace('\"', "").replace("\'", "").replace("«", "").replace("»", "")
+        adr = open(os.path.join(Cat, fixed_name) + '.url', 'w', encoding='utf-8')
+        adr.write(link)
+        adr.close()
 
-    req2 = urllib.request.urlopen(link)
-    html2 = req2.read()
-    soap2 = BeautifulSoup(html2, 'html.parser')
-    Text = soap2.findAll('p')
-    for line in Text:
-        line = BeautifulSoup.get_text(line)
-        f = open(os.path.join(Cat, fixed_name) + ".txt", 'a+', encoding='utf-8')
-        Line = format_sentence(line)
-        f.write(Line)
-        f.close()
-
+        req2 = urllib.request.urlopen(link)
+        html2 = req2.read()
+        soap2 = BeautifulSoup(html2, 'html.parser')
+        Text = soap2.findAll('p')
+        for line in Text:
+            line = BeautifulSoup.get_text(line)
+            f = open(os.path.join(Cat, fixed_name) + ".txt", 'a+', encoding='utf-8')
+            Line = format_sentence(line)
+            f.write(Line)
+            f.close()
+    except urllib.error.HTTPError:
+        print('urllib.error.HTTPError: HTTP Error 499: Request has been forbidden by antivirus')
 
 
 

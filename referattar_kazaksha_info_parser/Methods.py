@@ -8,13 +8,13 @@ def format_sentence(sentence):
     sentence = sentence.split(". ")
     lines = ''
     for s in sentence:
-        lines += s + "\n"
+        lines += s + ".\n"
     return lines.strip()
 
 
 def format_title(title):
     title = re.sub(r"\d+", "", title)
-    return title.strip()
+    return title.strip().replace('\"', "").replace("\'", "").replace("«", "").replace("»", "")
 
 
 def clean_me(html):
@@ -29,8 +29,7 @@ def article_action(article, cat, article_name):
         href = BeautifulSoup.find(article, 'a')['href']
         try:
             adr = open(os.path.join(cat, format_title(article_name)) + '.url', 'w', encoding='utf-8')
-            adr.write('[InternetShortcut]\n')
-            adr.write('URL=%s' % href)
+            adr.write(href)
             adr.close()
         except:
             pass

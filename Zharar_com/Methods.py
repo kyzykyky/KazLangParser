@@ -35,7 +35,7 @@ def Cat_action(Cat, Link):
     pages = soap.find('span', class_='navigation')
     page_count = int(BeautifulSoup.findAll(pages, 'a')[-1].get_text(strip=True))
     print('\n' + Cat + ' has ' + str(page_count) + ' pages.')
-    for page in range(52, page_count+1):
+    for page in range(1, page_count+1):
         l = Link + 'page/' + str(page)
         req1 = urllib.request.urlopen(l)
         html1 = req1.read()
@@ -59,7 +59,8 @@ def Cat_action(Cat, Link):
 
 def Article_action(Cat, article, link):
     print('Parsing ' + link + ' ...')
-    adr = open(os.path.join(Cat, article) + '.url', 'w', encoding='utf-8')
+    adr = open(os.path.join(Cat, article.replace('\"', "").replace("\'", "").replace("«", "").replace("»", ""))
+               + '.url', 'w', encoding='utf-8')
     adr.write(link)
     adr.close()
     try:
@@ -70,11 +71,10 @@ def Article_action(Cat, article, link):
         Text = BeautifulSoup.findAll(Block, 'div', class_='quote')
         for line in Text:
             line = BeautifulSoup.get_text(line)
-            f = open(os.path.join(Cat, article) + ".txt", 'a+', encoding='utf-8')
+            f = open(os.path.join(Cat, article.replace('\"', "").replace("\'", "").replace("«", "").replace("»", ""))
+                     + ".txt", 'a+', encoding='utf-8')
             line = format_sentence(line)
             f.write(line)
             f.close()
     except urllib.error.HTTPError:
         pass
-    # except FileNotFoundError:
-    #     pass

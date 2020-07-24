@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import urllib.request
+import  urllib.error
 from urllib.request import urlopen
 import os
 import re
@@ -11,12 +12,14 @@ import re
 
 # with urlopen(page) as url:      Пайтон 3 откр ЮРЛ
 #     s = url.read()
+base = 'https://articlekz.com'
+
 
 def format_sentence(sentence):
     sentence = sentence.split(". ")
     lines = ''
     for s in sentence:
-        lines += s + "\n"
+        lines += s + ".\n"
     return lines.strip()
 
 
@@ -36,6 +39,8 @@ def parse_article_kz_com(url, cat):
     req = urllib.request.urlopen(BASE_SITE)
     html = req.read()
 
+    art_count = 0  # 1111
+
     if not os.path.exists(cat):
         os.mkdir(cat)
 
@@ -53,32 +58,41 @@ def parse_article_kz_com(url, cat):
         print(str(len(links)) + ' articles:')
         print(links)
         for page in links:
+            pagee = base + page
+            print(pagee + ' is parsing...')
             try:
-                adr = open(os.path.join(cat, links[page].strip()) + '.url', 'w', encoding='utf-8')
-                adr.write('[InternetShortcut]\n')
-                adr.write('URL=%s' % page)
+                adr = open(os.path.join(cat, links[page].strip().replace('\"', "").replace("\'", "").replace("«", "")
+                                        .replace("»", "")) + '.url', 'w', encoding='utf-8')
+                adr.write(pagee)
                 adr.close()
             except:
                 pass
-            req1 = urllib.request.urlopen(page)
+
+            req1 = urllib.request.urlopen(pagee)
             html1 = req1.read()
-            soap1 = BeautifulSoup(my_url_open(page), 'html.parser')
-            print(page + ' is parsing...')
+            soap1 = BeautifulSoup(my_url_open(pagee), 'html.parser')
+
             for soupContent in soap1.find_all('p'):
                 try:
-                    f = open(os.path.join(cat, links[page].strip()) + ".txt", 'a+', encoding='utf-8')
+                    f = open(os.path.join(cat, links[page].strip().replace('\"', "").replace("\'", "").replace("«", "")
+                                          .replace("»", "")) + ".txt", 'a+', encoding='utf-8')
                     f.write(format_sentence(soupContent.text))
                     f.close()
                 except:
                     pass
 
         current_page += 1
-        req = urllib.request.urlopen(BASE_SITE + str(current_page))
-        html = req.read()
-        soap = BeautifulSoup(html, 'html.parser')
+        if current_page <= int(page_count):
+            try:
+                req = urllib.request.urlopen(BASE_SITE + str(current_page))
+                html = req.read()
+                soap = BeautifulSoup(html, 'html.parser')
+            except urllib.error.URLError as e:
+                print(e)
+                art_count += 1  # 1111
+                print('Total errors', art_count)
 
     print('\nOperation successful.')
-
 
 def single_page_parse(url, file):
     BASE_SITE = url
@@ -94,10 +108,12 @@ def single_page_parse(url, file):
     print(str(len(links)) + ' articles:')
     print(links)
     for page in links:
-        req1 = urllib.request.urlopen(page)
+        pagee = base + page
+        print(pagee + ' is parsing...')
+        req1 = urllib.request.urlopen(pagee)
         html1 = req1.read()
-        soap1 = BeautifulSoup(my_url_open(page), 'html.parser')
-        print(page + ' is parsing...')
+        soap1 = BeautifulSoup(my_url_open(pagee), 'html.parser')
+
         for soupContent in soap1.find_all('p'):
             f = open(file, 'a+', encoding='utf-8')
             f.write(format_sentence(soupContent.text))

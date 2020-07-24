@@ -9,7 +9,7 @@ def format_sentence(sentence):
     lines = ''
     for s in sentence:
         if len(s) > 25:
-            lines += s + "\n"
+            lines += s + ".\n"
     return lines.strip()
 
 
