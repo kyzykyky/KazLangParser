@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 import urllib.error
 import os
+import time
 
 
 def format_sentence(sentence):
@@ -76,3 +77,4 @@ def article_action(url, article, dest):
             pass
     else:
         print('Already parsed')
+        time.sleep(15)

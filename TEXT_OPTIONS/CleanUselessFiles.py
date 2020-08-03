@@ -20,7 +20,7 @@ for x in os.listdir(directory):
 			dest = directory + "\\" + x + "\\" + file
 			size = os.path.getsize(dest)/1024
 			print(file[:-4], size)
-			if (size < 2.2):
+			if (size < 0.1):	 # Exacting size
 				os.remove(dest)
 				txt_files[file[:-4]] = ''
 				urls_for_remove.append(file[:-4])
