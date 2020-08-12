@@ -26,12 +26,19 @@ tens = (
 )
 
 hundreds = (
-    u'бір жуз', u'екі жуз', u'үш жуз',
-    u'төрт жуз', u'бес жуз', u'алты жуз',
-    u'жеті жуз', u'сегіз жуз', u'тоғыз жуз'
+    u'бір жүз', u'екі жүз', u'үш жүз',
+    u'төрт жүз', u'бес жуз', u'алты жүз',
+    u'жеті жүз', u'сегіз жүз', u'тоғыз жүз'
 )
 
 orders = (
+    u'мың',
+    u'миллион',
+    u'миллиард',
+)
+
+orders_ = (
+    u'жүз',
     u'мың',
     u'миллион',
     u'миллиард',
@@ -97,17 +104,27 @@ def num2text(num, main_units=u'', ord_num=True):
     return ' '.join(name).strip()
 
 
-def text2num(text):
+def text2num(text):     # !!!
     num = ''
+    length = 0
+    ords = 0
+    i = 0
     for soz in text.split(' '):
-        if soz in orders:
-            pass
+        if soz in orders_:
+            ords += 1
+            if i == length:
+                num += '0' * ((orders_.index(soz)+1)*3-1)
+            length -= 1
+
         elif soz in units:
             num += str(units.index(soz))
         elif soz in tens:
             num += str(tens.index(soz)+1)
-        elif soz == 'минус':
+        elif soz == 'минус' and i == 0:
             num += '-'
+            length -= 1
+        length += 1
+        i += 1
     return num
 
 
@@ -135,5 +152,5 @@ def date2text(date):
 
 
 print(date2text('23.07.2020'))
-print(num2text(654321), text2num(num2text(654321)))
+print(num2text(6000), text2num(num2text(6000)))
 # print(text2num(),)
