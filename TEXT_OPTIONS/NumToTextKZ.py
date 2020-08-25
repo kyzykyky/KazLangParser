@@ -27,7 +27,7 @@ tens = (
 
 hundreds = (
     u'бір жүз', u'екі жүз', u'үш жүз',
-    u'төрт жүз', u'бес жуз', u'алты жүз',
+    u'төрт жүз', u'бес жүз', u'алты жүз',
     u'жеті жүз', u'сегіз жүз', u'тоғыз жүз'
 )
 
@@ -37,12 +37,6 @@ orders = (
     u'миллиард',
 )
 
-orders_ = (
-    u'жүз',
-    u'мың',
-    u'миллион',
-    u'миллиард',
-)
 
 months = (
     u'қаңтар',
@@ -104,28 +98,10 @@ def num2text(num, main_units=u'', ord_num=True):
     return ' '.join(name).strip()
 
 
-def text2num(text):     # !!!
-    num = ''
-    length = 0
-    ords = 0
-    i = 0
-    for soz in text.split(' '):
-        if soz in orders_:
-            ords += 1
-            if i == length:
-                num += '0' * ((orders_.index(soz)+1)*3-1)
-            length -= 1
-
-        elif soz in units:
-            num += str(units.index(soz))
-        elif soz in tens:
-            num += str(tens.index(soz)+1)
-        elif soz == 'минус' and i == 0:
-            num += '-'
-            length -= 1
-        length += 1
-        i += 1
-    return num
+def text2numITER(text):     # Not optimal
+    for i in range(0, 1000000):
+        if num2text(i) == text:
+            return i
 
 
 def date2text(date):
@@ -151,6 +127,6 @@ def date2text(date):
     return text
 
 
+numba = 134999
 print(date2text('23.07.2020'))
-print(num2text(6000), text2num(num2text(6000)))
-# print(text2num(),)
+print(num2text(numba), text2numITER(num2text(numba)))
